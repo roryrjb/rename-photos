@@ -6,6 +6,7 @@ use rexif::ExifTag::DateTime as ExifDateTime;
 use std::env;
 use std::fs;
 use std::path::Path;
+use std::process::exit;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -24,12 +25,16 @@ fn main() {
                     let new_name = format!("./{}", dt.format("%Y/%m_%B/%Y_%m_%d_%H_%M_%S.jpg"));
                     let dirname = Path::new(&new_name).parent().unwrap();
                     fs::create_dir_all(dirname).unwrap();
-                    fs::rename(filename, new_name).unwrap();
+                    fs::rename(filename, &new_name).unwrap();
+                    println!("moved file to {}", &new_name);
+
+                    break;
                 }
             }
         }
         Err(e) => {
             println!("Error: {}.", &e);
+            exit(1);
         }
     }
 }

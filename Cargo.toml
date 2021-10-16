@@ -1,0 +1,11 @@
+[package]
+name = "rename-photos"
+version = "0.1.0"
+edition = "2018"
+
+[profile.release]
+lto = true
+
+[dependencies]
+rexif = "0.7.3"
+chrono = "0.4.19"

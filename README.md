@@ -36,9 +36,7 @@ this fits a single use case that I use all the time to organise photos locally._
 ## Installation
 
 ```
-git clone https://github.com/roryrjb/rename-photos
-cd rename-photos
-cargo install --path .
+cargo install --git https://github.com/roryrjb/rename-photos
 ```
 
 Tested on Linux and Windows.

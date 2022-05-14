@@ -27,8 +27,10 @@ fn get_date_from_photo(filename: &str) -> Option<NaiveDateTime> {
 }
 
 fn sort_photos(create_dirs: bool) -> Result<()> {
-    for entry in glob("*.[jJ][pP]*[gG]").unwrap() {
-        match entry.unwrap().to_str() {
+    let entries = glob("*.[jJ][pP]*[gG]")?;
+
+    for entry in entries {
+        match entry?.to_str() {
             // Get a file entry or just continue
             Some(f) => {
                 // Get a NaiveDateTime or if not just continue to the next file
@@ -44,14 +46,21 @@ fn sort_photos(create_dirs: bool) -> Result<()> {
                 };
 
                 let new_name = format!("./{}", date.format(fmt_string));
-                let dirname = Path::new(&new_name).parent().unwrap();
 
-                if create_dirs {
-                    fs::create_dir_all(dirname)?;
-                }
+                match Path::new(&new_name).parent() {
+                    Some(dir) => {
+                        if create_dirs {
+                            fs::create_dir_all(dir)?;
+                        }
 
-                fs::rename(f, &new_name)?;
-                eprintln!("moved file to {}", &new_name);
+                        fs::rename(f, &new_name)?;
+                        eprintln!("moved file to {}", &new_name);
+                    },
+                    None => {
+                        panic!("path error");
+                    }
+                };
+
             }
 
             None => continue,
